@@ -1,0 +1,17 @@
+/* CircularProgressBar.module.scss */
+
+.circularProgressBar {
+  display: block;
+}
+
+.backgroundCircle,
+.progressCircle {
+  transform-origin: center;
+  transition: stroke-dashoffset 0.35s;
+}
+
+.percentageText {
+  fill: #000;
+  font-size: 20px;
+  font-weight: 700;
+}

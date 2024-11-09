@@ -5,11 +5,13 @@
     "action": {
         "default_popup": "index.html"
     },
-    "permissions": [
-        "scripting"
-    ],
+    "permissions": ["activeTab", "scripting", "tabs"],
     "host_permissions": [
         "http://*/*",
-        "https://*/*"
-    ]
+        "https://*/*",
+        "http://localhost/*"
+    ],
+    "icons": {
+        "32": "primary-logo.png"
+    }
 }

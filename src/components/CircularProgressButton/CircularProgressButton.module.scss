@@ -1,0 +1,32 @@
+/* CircularProgressButton.module.scss */
+
+.circularProgressButton {
+  display: inline-block;
+  position: relative;
+}
+
+.circularProgressBar {
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+.backgroundCircle,
+.progressCircle {
+  transform-origin: center;
+  transition: stroke-dashoffset 0.35s;
+}
+
+.centerButton {
+  align-items: center;
+  // background-color: #D6F06B;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
