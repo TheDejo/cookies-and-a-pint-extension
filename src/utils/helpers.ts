@@ -51,3 +51,17 @@ export function highlightKeywordsOnPage(skills: string[]) {
         walkTextNodes(document.body);
     });
 }
+
+type FormData = { name: string; value: string };
+
+export function autofillFormFields(data: FormData[]) {
+    const form = document.querySelector('form');
+    if (!form) return;
+
+    data.forEach(({ name, value }) => {
+        const field = form.querySelector(`[name="${name}"]`) as HTMLInputElement | HTMLTextAreaElement;
+        if (field) {
+            field.value = value;
+        }
+    });
+}

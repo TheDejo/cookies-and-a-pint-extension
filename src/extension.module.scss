@@ -2,6 +2,7 @@
     padding: 18px;
     background-color: #F5F4F2;
     width: 380px;
+    min-height: 490px;
 
     .card {
         background-color: #F5F4F2;
@@ -16,6 +17,16 @@
             padding-bottom: 24px;
         }
 
+        .content {
+            min-height: 330px;
+
+            &.isLoading {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
         .companyTitle {
             display: flex;
             justify-content: space-between;
@@ -26,7 +37,7 @@
         .title,
         .company {
             color: #232117;
-            font-size: 20px;
+            font-size: 14px;
             font-weight: 500;
             margin: 0;
         }
@@ -51,22 +62,21 @@
         }
 
         .skill {
-            display: inline-flex;
-            height: 18px;
+            display: flex;
             padding: 3px 8px;
             justify-content: center;
             margin: 0;
             align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
+            gap: 8px;
             border-radius: 4px;
             background: rgba(214, 240, 107, 0.25);
             border: 1px solid #D6F06B;
-
-            &.isContained {
-                background: #c4c4c4;
-                border: 1px solid #232117;
-            }
+            max-width: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            direction: ltr;
+            text-align: left;
         }
 
         .source {
@@ -94,12 +104,24 @@
             margin: 12px 0 24px 0;
         }
 
+        .buttonContainer {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
         .jobDescription {
             color: rgba(35, 33, 23, 0.50);
             font-size: 12px;
             font-weight: 400;
             border-top: 1px solid rgba(35, 33, 23, 0.25);
             padding-top: 24px;
+        }
+
+        .autofillText {
+            margin-block-start: 0 !important;
+            margin-block-end: 0 !important;
+            padding-right: 8px;
         }
     }
 }

@@ -5,7 +5,13 @@
     "action": {
         "default_popup": "index.html"
     },
-    "permissions": ["activeTab", "scripting", "tabs"],
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "tabs",
+        "cookies",
+        "storage"
+    ],
     "host_permissions": [
         "http://*/*",
         "https://*/*",
