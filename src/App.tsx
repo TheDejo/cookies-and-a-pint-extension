@@ -17,6 +17,9 @@ export interface JobData {
   hardSkills: string[];
   softSkills: string[];
   skills: string[];
+  scoringResult: {
+    matchScore: number;
+  };
 }
 
 function App() {
@@ -27,6 +30,9 @@ function App() {
     hardSkills: [],
     softSkills: [],
     skills: [],
+    scoringResult: {
+      matchScore: 0,
+    },
   });
   const [isFormAvailable, setIsFormAvailable] = useState<boolean>(false);
   const [isAutofilling, setIsAutofilling] = useState<boolean>(false);
@@ -126,6 +132,9 @@ function App() {
                     hardSkills: data.hard_skills || [],
                     softSkills: data.soft_skills || [],
                     skills: [...(data.hard_skills || []), ...(data.soft_skills || [])],
+                    scoringResult: {
+                      matchScore: data.scoringResult.matchScore,
+                    },
                   };
                   setJobData(jobData);
 

@@ -4,8 +4,17 @@ import cx from 'classnames';
 import CircularProgressBar from './CircularProgress/CircularProgress';
 import { LoadingState } from './LoadingState/LoadingState';
 import { AutofillIcon } from './Icons/AutofillIcon';
-import { JobData } from '../App';
-
+interface JobData {
+    companyName: string;
+    jobRole: string;
+    jobDescription: string;
+    hardSkills: string[];
+    softSkills: string[];
+    skills: string[];
+    scoringResult: {
+        matchScore: number;
+    };
+}
 interface SkillCardProps {
     jobData: JobData;
     onJobScan: () => void;
@@ -28,7 +37,7 @@ export default function SkillCard({ jobData, onJobScan, isLoading, isAutofilling
                         <div className={styles.matcher}>
                             <CircularProgressBar
                                 size={72}
-                                progress={70}
+                                progress={jobData.scoringResult.matchScore || 0}
                                 strokeWidth={5}
                                 circleOneStroke="#E4F0B5"
                                 circleTwoStroke="#D6F06B"
