@@ -1,10 +1,11 @@
 import { Loader } from '../Icons/Loader';
+import styles from './LoadingState.module.scss'
 
 export const LoadingState = () => {
     return (
-        <div>
+        <div className={styles.component}>
             <Loader />
-            <p>SCANNING</p>
+            <p>Scaning job description</p>
         </div>
     )
 }

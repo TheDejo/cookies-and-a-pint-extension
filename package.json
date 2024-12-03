@@ -1,7 +1,7 @@
 {
-  "name": "cookies-and-a-pint-extension",
+  "name": "sunday-morning-extension",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/jwt-decode": "^3.1.0",
     "classnames": "^2.5.1",
+    "jwt-decode": "^4.0.0",
     "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
