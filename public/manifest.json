@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "Sunday morning",
   "action": {
     "default_icon": "primary-logo.png",
