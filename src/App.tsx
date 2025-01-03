@@ -41,11 +41,12 @@ function App() {
   const [userName, setUserName] = useState('');
   const [error, setError] = useState<Error | null>(null);
   const [isPremium, setIsPremium] = useState<boolean>(true);
+  
 
   const getAuthCookie = (): Promise<{ firstName: string; user_id: string } | null> =>
     new Promise((resolve) => {
       chrome.cookies.get(
-        { url: 'http://localhost:3000', name: 'sunday-morning-user' },
+        { url: API_ROUTES.getCookies, name: 'sunday-morning-user' },
         (cookie) => {
           if (cookie) {
             try {

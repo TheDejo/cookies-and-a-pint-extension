@@ -24,6 +24,15 @@
             padding-bottom: 24px;
         }
 
+        .beta {
+            border: 1px solid #Fed330;
+            padding: 2px 4px;
+            border-radius: 4px;
+            // color: #Fed330;
+            background-color: #FED33066;
+            ;
+        }
+
         .name {
             color: #23171780;
             text-transform: capitalize;
@@ -35,7 +44,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
 
+        .greeting {
+            width: 100%;
+            display: flex;
+            padding-bottom: 10px;
         }
 
         .companyTitle {

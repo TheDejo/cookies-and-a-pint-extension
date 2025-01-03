@@ -58,6 +58,7 @@ export default function SkillCard({
 
         return (
             <div>
+                <span className={styles.greeting}>Hello, {name.toUpperCase()}!</span>
                 <div className={styles.matcher}>
                     <CircularProgressBar
                         size={72}
@@ -74,7 +75,7 @@ export default function SkillCard({
                     </p>
                 </div>
                 <p className={styles.summary}>
-                    {`This resume contains ${jobData.skills.length} keywords featured in the job description.`}
+                    {`This role requires a total of ${jobData.skills.length} specific skills that are considered essential to meet its responsibilities effectively.`}
                 </p>
                 <div className={styles.skillGroup}>
                     {jobData.skills.map((skill) => (
@@ -126,7 +127,7 @@ export default function SkillCard({
         <div className={styles.card}>
             <div className={styles.header}>
                 <img className={styles.logo} src={Logo} alt="Sunday morning logo" />
-                <span >Hello <span className={styles.name}>{name}</span></span>
+                <span className={styles.beta}>beta</span>
             </div>
             <div className={cx(styles.content)}>{generateContent()}</div>
             <div className={styles.jobDescription}>
