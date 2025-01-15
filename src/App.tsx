@@ -7,6 +7,7 @@ import {
 } from './utils/helpers';
 import SkillCard from './components/SkillCard';
 import { constants } from './config/constants';
+import { decodetoken } from './utils/jwtDecode';
 
 const { API_ROUTES } = constants;
 
@@ -37,21 +38,69 @@ function App() {
   const [isFormAvailable, setIsFormAvailable] = useState<boolean>(false);
   const [isAutofilling, setIsAutofilling] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [userName, setUserName] = useState('');
+  const [error, setError] = useState<Error | null>(null);
+  const [isPremium, setIsPremium] = useState<boolean>(true);
+  
 
-  const getAuthCookie = (): Promise<string | undefined> =>
+  const getAuthCookie = (): Promise<{ firstName: string; user_id: string } | null> =>
     new Promise((resolve) => {
       chrome.cookies.get(
-        { url: 'http://localhost:3000', name: 'sunday-morning-user' },
+        { url: API_ROUTES.getCookies, name: 'sunday-morning-user' },
         (cookie) => {
           if (cookie) {
-            resolve(cookie.value);
+            try {
+              const decoded = decodetoken(cookie.value);
+              setUserName(decoded.firstName);
+              resolve(decoded);
+            } catch (error: any) {
+              console.error('Token error:', error.message);
+              resolve(null);
+            }
           } else {
             console.warn('No auth token found in cookies');
-            resolve(undefined);
+            resolve(null);
           }
         }
       );
     });
+
+  const checkSubscriptionStatus = async () => {
+    setError(null);
+    const authCookie = await getAuthCookie();
+
+    if (!authCookie) {
+      console.warn('No auth token available. Unable to check subscription status.');
+      setError(new Error('Please make sure you are logged in'));
+      return;
+    }
+
+    try {
+      const response = await fetch(API_ROUTES.checkSubscriptionDetails, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: authCookie.user_id }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to check subscription status: ${response.statusText}`);
+      }
+
+      const { isPremium } = await response.json();
+      console.log('Subscription status:', isPremium);
+
+      setIsPremium(isPremium);
+    } catch (error: any) {
+      console.error('Error checking subscription status:', error);
+      setError(new Error('Failed to check subscription status'));
+    }
+  };
+
+  useEffect(() => {
+    checkSubscriptionStatus();
+  }, []);
 
   useEffect(() => {
     if (typeof chrome !== 'undefined' && chrome.storage) {
@@ -97,7 +146,16 @@ function App() {
 
   const handleScanJob = async () => {
     setIsLoading(true);
+    setError(null);
     const authCookie = await getAuthCookie();
+
+    if (!authCookie) {
+      console.warn("No auth token available. Scanning aborted.");
+      setError(new Error("Please make sure you are logged in"));
+      setIsLoading(false);
+      return;
+    }
+
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const activeTab = tabs[0];
       if (activeTab?.id) {
@@ -107,19 +165,21 @@ function App() {
             func: getTextContentFromPage,
           },
           async (injectionResults) => {
-            const pageText = injectionResults[0]?.result;
+            const pageText = injectionResults?.[0]?.result;
 
             if (pageText) {
               try {
                 const response = await fetch(API_ROUTES.extractSkills, {
                   method: 'POST',
-                  body: JSON.stringify({ text: pageText, userId: authCookie }),
+                  body: JSON.stringify({ text: pageText, userId: authCookie.user_id }),
                   headers: {
                     'Content-Type': 'application/json',
                   },
                 });
 
-                if (!response.ok) throw new Error('Failed to fetch data from backend');
+                if (!response.ok) {
+                  throw new Error(`Failed to fetch data from backend: ${response.statusText}`);
+                }
 
                 const { data } = await response.json();
                 console.log('Received Data:', data);
@@ -152,13 +212,16 @@ function App() {
                   },
                   () => console.log('Keywords highlighted on the page.')
                 );
-              } catch (error) {
+              } catch (error: any) {
                 console.error('Error fetching skills:', error);
+                setError(error);
               } finally {
                 setIsLoading(false);
               }
             } else {
-              console.error('Failed to retrieve text content from page.');
+              const error = new Error('Failed to retrieve text content from page.');
+              console.error(error.message);
+              setError(error);
               setIsLoading(false);
             }
           }
@@ -167,9 +230,18 @@ function App() {
     });
   };
 
+
   const handleAutofillForm = async () => {
     setIsAutofilling(true);
+    setError(null);
     const authCookie = await getAuthCookie();
+
+    if (!authCookie) {
+      console.warn("No auth token available. Autofill aborted.");
+      setError(new Error("Please make sure you are logged in again."));
+      setIsAutofilling(false);
+      return;
+    }
 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const activeTab = tabs[0];
@@ -180,19 +252,21 @@ function App() {
             func: extractFormDetails,
           },
           async (injectionResults) => {
-            const formDetails = injectionResults[0]?.result;
+            const formDetails = injectionResults?.[0]?.result;
 
             if (formDetails) {
               try {
                 const response = await fetch(API_ROUTES.autofill, {
                   method: 'POST',
-                  body: JSON.stringify({ formDetails, userId: authCookie }),
+                  body: JSON.stringify({ formDetails, userId: authCookie.user_id }),
                   headers: {
                     'Content-Type': 'application/json',
                   },
                 });
 
-                if (!response.ok) throw new Error('Failed to fetch autofill data from backend');
+                if (!response.ok) {
+                  throw new Error(`Failed to fetch autofill data: ${response.statusText}`);
+                }
 
                 const data = await response.json();
                 console.log('Received Autofill Data:', data);
@@ -213,8 +287,9 @@ function App() {
                         const fileName = value.split('/').pop() || 'file.pdf';
                         const file = new File([blob], fileName, { type: blob.type });
                         fileDataMap[name] = { file, fieldName: name };
-                      } catch (error) {
+                      } catch (error: any) {
                         console.error('Error fetching file:', error);
+                        setError(error);
                       }
                     }
                   }
@@ -228,15 +303,20 @@ function App() {
                     () => setIsAutofilling(false)
                   );
                 } else {
-                  console.error('Unexpected response format', data);
+                  const error = new Error('Unexpected response format');
+                  console.error(error.message);
+                  setError(error);
                   setIsAutofilling(false);
                 }
-              } catch (error) {
+              } catch (error: any) {
                 console.error('Error fetching autofill data:', error);
+                setError(error);
                 setIsAutofilling(false);
               }
             } else {
-              console.error('No form detected on the page.');
+              const error = new Error('No form detected on the page.');
+              console.error(error.message);
+              setError(error);
               setIsFormAvailable(false);
               setIsAutofilling(false);
             }
@@ -251,6 +331,9 @@ function App() {
   return (
     <div className={styles.component}>
       <SkillCard
+        name={userName}
+        isPremium={isPremium}
+        error={error}
         jobData={jobData}
         onJobScan={handleScanJob}
         onHandleAutofillForm={handleAutofillForm}

@@ -5,11 +5,18 @@
     min-height: 490px;
 
     .card {
+        position: relative;
         background-color: #F5F4F2;
         color: #232117;
         padding: 32px 24px;
         border: 1px dashed rgba(35, 33, 23, 0.25);
         border-radius: 24px;
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
         .logo {
             display: flex;
@@ -17,14 +24,32 @@
             padding-bottom: 24px;
         }
 
+        .beta {
+            border: 1px solid #Fed330;
+            padding: 2px 4px;
+            border-radius: 4px;
+            // color: #Fed330;
+            background-color: #FED33066;
+            ;
+        }
+
+        .name {
+            color: #23171780;
+            text-transform: capitalize;
+            font-weight: 700;
+        }
+
         .content {
             min-height: 330px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-            &.isLoading {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+        .greeting {
+            width: 100%;
+            display: flex;
+            padding-bottom: 10px;
         }
 
         .companyTitle {
@@ -71,12 +96,7 @@
             border-radius: 4px;
             background: rgba(214, 240, 107, 0.25);
             border: 1px solid #D6F06B;
-            max-width: 200px;
             overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            direction: ltr;
-            text-align: left;
         }
 
         .source {
@@ -122,6 +142,48 @@
             margin-block-start: 0 !important;
             margin-block-end: 0 !important;
             padding-right: 8px;
+        }
+
+
+        .blockScan {
+            position: absolute;
+            display: flex;
+            align-items: flex-end;
+            bottom: 0;
+            left: 0;
+            height: 150px;
+            width: 100%;
+            background: linear-gradient(180deg, rgba(214, 240, 107, 0.00) 0%, #D6F06B 100%);
+            border-radius: 0px 0px 24px 24px;
+
+            .textBox {
+                padding: 16px 24px;
+                margin: 0 18px 18px;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                background-color: #F0EFEB;
+                border-radius: 24px;
+            }
+
+            .limit {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                font-size: 14px;
+                color: #232117;
+                font-weight: 500;
+                padding-bottom: 8px;
+            }
+
+            .upgrade {
+                font-size: 12px;
+            }
+
+            .premium {
+                color: #23171780;
+            }
         }
     }
 }

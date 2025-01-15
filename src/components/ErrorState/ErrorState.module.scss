@@ -1,0 +1,27 @@
+.component {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    .details {
+        color: #232117;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 400;
+        max-width: 283px;
+    }
+
+    .emailUs,
+    .email {
+        color: #232117;
+        text-align: center;
+        margin: 0;
+        font-size: 12px;
+        font-weight: 400;
+    }
+
+    .email {
+        color: rgba(35, 33, 23, 0.50);
+    }
+}

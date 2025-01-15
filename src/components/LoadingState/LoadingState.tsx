@@ -1,10 +1,11 @@
-import { Loader } from '../Icons/Loader';
+import { LoadingBlob } from '../LoadingBlob/LoadingBlob';
+import styles from './LoadingState.module.scss'
 
 export const LoadingState = () => {
     return (
-        <div>
-            <Loader />
-            <p>SCANNING</p>
+        <div className={styles.component}>
+            <LoadingBlob />
+            <p>Scaning job description</p>
         </div>
     )
 }
